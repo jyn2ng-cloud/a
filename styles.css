@@ -9,3 +9,13 @@ body { font-family: system-ui, sans-serif; margin: 0; }
 .myth { display:flex; gap:12px; }
 .myth .half { flex:1; background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
 footer { padding:16px; border-top:1px solid #e5e7eb; }
+.methods.card { margin-top: 12px; }
+.btn.colab {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px;
+  text-decoration:none; color:#111827; background:#fff; margin-right:8px; margin-bottom:8px;
+}
+.btn.colab:hover { background:#f9fafb; }
+.btn.colab img { height:20px; }
+details summary { cursor:pointer; margin-top:8px; }
+
