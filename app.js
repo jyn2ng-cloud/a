@@ -1,15 +1,6 @@
-// TODO: CSV 로드 → 필터 반영 → Plotly로 차트 업데이트
-// 최소 동작용 가짜 데이터
-let data = Array.from({length: 120}, (_,i)=>({
-  subject: i%2 ? "Math":"Language",
-  gender: i%3? "Female":"Male",
-  motivation: Math.random()*10,
-  interest: Math.random()*10,
-  study_time: Math.random()*12,
-  grade: 60 + Math.random()*40,
-  SES: ["Q1","Q2","Q3","Q4"][i%4],
-  school_type: ["General","International","Autonomous"][i%3]
-}));
+// app.js — load CSV + draw charts
+
+let data = [];
 
 const els = {
   subject: document.getElementById('subject'),
@@ -22,6 +13,70 @@ const els = {
   r2: document.getElementById('r2'),
   n: document.getElementById('n')
 };
+
+// 1) Load data.csv (header must be: id,subject,gender,motivation,interest,study_time,grade,SES,school_type)
+Papa.parse('data.csv', {
+  download: true,
+  header: true,
+  dynamicTyping: true,
+  complete: (res) => {
+    data = res.data.filter(r => r.subject && r.gender); // basic clean
+    draw();
+  }
+});
+
+function filterData() {
+  let d = data.filter(r =>
+    (els.subject.value==="All" || r.subject===els.subject.value) &&
+    (els.gender.value==="All" || r.gender===els.gender.value) &&
+    (els.school.value==="All" || r.school_type===els.school.value) &&
+    (els.ses.value==="All" || r.SES===els.ses.value)
+  );
+  if (els.toggleEqualMot.checked && d.length) {
+    const mVals = d.map(r=>Number(r.motivation)).filter(v=>!isNaN(v)).sort((a,b)=>a-b);
+    const med = mVals[Math.floor(mVals.length/2)] ?? 5;
+    d = d.filter(r => Math.abs((Number(r.motivation)||0) - med) < 1.0);
+  }
+  return d;
+}
+
+function mean(arr, key) {
+  const xs = arr.map(r=>Number(r[key])).filter(v=>!isNaN(v));
+  return xs.length ? xs.reduce((a,b)=>a+b,0)/xs.length : null;
+}
+
+function draw() {
+  const d = filterData();
+
+  // Scatter: motivation vs grade (변경 원하면 interest로 바꿔도 됨)
+  Plotly.newPlot('scatter', [{
+    x: d.map(r=>Number(r.motivation)),
+    y: d.map(r=>Number(r.grade)),
+    text: d.map(r=>`${r.gender}, ${r.subject}`),
+    mode: 'markers',
+    type: 'scattergl'
+  }], {margin:{l:40,r:10,t:10,b:40}, xaxis:{title:'Motivation'}, yaxis:{title:'Achievement'}});
+
+  // Bars: mean grade by gender
+  const groups = ['Male','Female'];
+  const means = groups.map(g => mean(d.filter(r=>r.gender===g),'grade'));
+  Plotly.newPlot('bars', [{
+    x: groups, y: means, type:'bar'
+  }], {margin:{l:40,r:10,t:10,b:40}, yaxis:{title:'Mean Achievement'}});
+
+  // Simple stat placeholders (원하면 실제 회귀 계산 코드 넣어줄 수 있어요)
+  els.beta.textContent = d.length > 0 ? '~ +0.3 (demo)' : '—';
+  els.pval.textContent = d.length > 30 ? '< 0.05 (demo)' : '—';
+  els.r2.textContent = '~ 0.25 (demo)';
+  els.n.textContent = d.length;
+}
+
+// Re-draw on control changes
+['subject','gender','school','ses'].forEach(id => {
+  document.getElementById(id).addEventListener('change', draw);
+});
+els.toggleEqualMot.addEventListener('change', draw);
+
 
 function filterData() {
   let d = data.filter(r =>
@@ -70,3 +125,4 @@ function draw() {
   (id==='toggleEqualMot'? els.toggleEqualMot: document.getElementById(id)).addEventListener('change', draw);
 });
 draw();
+
