@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Equal Motivation, Do Gender Gaps Persist?</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+</head>
+<body>
+  <header class="hero">
+    <h1>Equal Motivation, Do Gender Gaps Persist?</h1>
+    <p>Hold motivation/interest constant and compare achievement by subgroup.</p>
+    <label><input type="checkbox" id="toggleEqualMot"> Equalize motivation/interest (matched subset)</label>
+  </header>
+
+  <section class="controls">
+    <select id="subject"><option>Math</option><option>Language</option></select>
+    <select id="gender"><option>All</option><option>Male</option><option>Female</option></select>
+    <select id="school"><option>All</option><option>General</option><option>International</option><option>Autonomous</option></select>
+    <select id="ses"><option>All</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option></select>
+  </section>
+
+  <section class="charts">
+    <div class="card">
+      <h2>Scatter: Motivation (or Interest) vs Achievement</h2>
+      <div id="scatter"></div>
+    </div>
+    <div class="card">
+      <h2>Group Means: Achievement by Gender (CI)</h2>
+      <div id="bars"></div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat-card"><strong>β (Mot→Ach):</strong> <span id="beta">—</span></div>
+    <div class="stat-card"><strong>p-value:</strong> <span id="pval">—</span></div>
+    <div class="stat-card"><strong>R²:</strong> <span id="r2">—</span></div>
+    <div class="stat-card"><strong>n:</strong> <span id="n">—</span></div>
+  </section>
+
+  <section class="myth">
+    <div class="half"><h3>Myth</h3><p>“Boys → Math, Girls → Language.”</p></div>
+    <div class="half"><h3>Our Test</h3><p>Holding motivation/interest constant, does the gap remain?</p></div>
+  </section>
+
+  <footer>
+    <a href="Executive_Summary.pdf" target="_blank">Executive Summary (PDF)</a> ·
+    <a href="System_Maps.html" target="_blank">System Maps</a> ·
+    <a href="data.csv" download>Download Data</a>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+

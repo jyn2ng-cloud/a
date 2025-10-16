@@ -1,0 +1,11 @@
+body { font-family: system-ui, sans-serif; margin: 0; }
+.hero { padding: 24px 16px; background:#f6f8fb; border-bottom:1px solid #e5e7eb; }
+.controls, .stats, .myth, .charts { padding: 16px; }
+.controls select { margin-right:8px; }
+.charts { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
+.stats { display:flex; gap:12px; flex-wrap:wrap; }
+.stat-card { background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:8px 12px; }
+.myth { display:flex; gap:12px; }
+.myth .half { flex:1; background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:12px; }
+footer { padding:16px; border-top:1px solid #e5e7eb; }
